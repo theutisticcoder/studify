@@ -1,42 +1,65 @@
-import React, { useState } from "react";
-import { ClipboardDocumentListIcon } from "@heroicons/react/24/outline"; // If using Heroicons
-
-const AP_EXAMS = [
-  "AP Biology", "AP Calculus AB", "AP Calculus BC", // ...etc
-];
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { FullExam, Question } from "../types";
 
 export default function FullLengthExam() {
-  const [selectedExam, setSelectedExam] = useState<string | null>(null);
+  const location = useLocation();
+  const exam: FullExam = location.state?.exam;
 
-  function handleStart() {
-    // Integrate with your full-length exam logic here
-    alert(`Start full-length exam for ${selectedExam}`);
+  const [currentSection, setCurrentSection] = useState(0);
+  const [currentQ, setCurrentQ] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, number | string>>({});
+
+  if (!exam) return <p>No exam loaded.</p>;
+
+  const section = exam.sections[currentSection];
+  const question = section.questions[currentQ];
+
+  function handleAnswer(q: Question, ans: number | string) {
+    setAnswers((prev) => ({ ...prev, [q.id]: ans }));
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 flex items-center text-teal-700">
-        <ClipboardDocumentListIcon className="w-7 h-7 mr-2" />
-        Full-Length AP Exam Practice
-      </h1>
-      <label className="block mb-2 font-semibold">Choose an AP course:</label>
-      <select
-        className="w-full border p-2 rounded mb-6"
-        value={selectedExam ?? ""}
-        onChange={e => setSelectedExam(e.target.value)}
-      >
-        <option value="" disabled>Select AP Course</option>
-        {AP_EXAMS.map(exam => (
-          <option key={exam} value={exam}>{exam}</option>
-        ))}
-      </select>
-      <button
-        disabled={!selectedExam}
-        className={`w-full px-4 py-2 rounded bg-teal-600 text-white font-bold transition shadow ${!selectedExam ? "opacity-50 cursor-not-allowed" : "hover:bg-teal-700"}`}
-        onClick={handleStart}
-      >
-        Start Full-Length Exam
-      </button>
+    <div>
+      <h1>{exam.examTitle}</h1>
+      <h2>{section.sectionTitle}</h2>
+      <p>{question.questionText}</p>
+
+      {question.options ? (
+        <div>
+          {question.options.map((opt, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleAnswer(question, idx)}
+              style={{
+                backgroundColor: answers[question.id] === idx ? "#ddd" : "",
+              }}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <textarea
+          value={(answers[question.id] as string) || ""}
+          onChange={(e) => handleAnswer(question, e.target.value)}
+        />
+      )}
+
+      <div>
+        <button
+          disabled={currentQ === 0}
+          onClick={() => setCurrentQ((q) => q - 1)}
+        >
+          Previous
+        </button>
+        <button
+          disabled={currentQ === section.questions.length - 1}
+          onClick={() => setCurrentQ((q) => q + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
