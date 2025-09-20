@@ -6,7 +6,6 @@ import Home from './components/Home';
 import AITutorView from './components/AITutorView';
 import APExamsView from './components/APExamsView';
 import APExamDetailView from './components/APExamDetailView';
-import exams from '../exams';
 
 type Theme = 'light' | 'dark';
 
@@ -55,7 +54,6 @@ const App: React.FC = () => {
               <Route path="/tutor" element={<AITutorView />} />
               <Route path="/exams" element={<APExamsView />} />
               <Route path="/exams/:examId" element={<APExamDetailView />} />
-              <Route path="/explore" element={<exams />} />
             </Routes>
           </main>
         </div>
