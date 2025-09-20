@@ -2,6 +2,7 @@
   "name": "intelligrade-ai-study-hub",
   "private": true,
   "version": "0.0.0",
+  "main": "index.jsx",
   "type": "module",
   "scripts": {
     "dev": "vite",
