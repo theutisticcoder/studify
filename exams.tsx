@@ -63,7 +63,7 @@ async function geminiApi({ mode, examName }: { mode: 'exam' | 'full', examName: 
 }
 
 // Main App Component
-const ModernStudyApp: React.FC = () => {
+const exams: React.FC = () => {
   const [route, setRoute] = useState<"home" | "explore" | "examSession">("home");
   const [selectedExam, setSelectedExam] = useState<string | null>(null);
   const [examData, setExamData] = useState<ExamData | null>(null);
