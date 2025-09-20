@@ -55,7 +55,7 @@ const App: React.FC = () => {
               <Route path="/tutor" element={<AITutorView />} />
               <Route path="/exams" element={<APExamsView />} />
               <Route path="/exams/:examId" element={<APExamDetailView />} />
-              <Route path="/explore" element={<exas\m />} />
+              <Route path="/explore" element={<exams />} />
             </Routes>
           </main>
         </div>
